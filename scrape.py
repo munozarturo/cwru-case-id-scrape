@@ -27,7 +27,7 @@ def generate_query_url(seach_text: str    = "",
         search_method (str, optional): Search method, one of 'regular', 'phonetic'. Defaults to "regular".
 
     Returns:
-        str: _description_
+        str: Query url.
     """
     
     # validate arguments
@@ -52,3 +52,4 @@ def generate_query_url(seach_text: str    = "",
             f"search_text={seach_text}&surname={surname}&givenname={given_name}" + \
             f"&department=&location=&category={category}" + \
             f"&search_method={search_method}"
+            
