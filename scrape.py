@@ -7,8 +7,6 @@ from urllib.parse import quote
 def generate_query_url(seach_text: str    = "",
                        surname: str       = "",
                        given_name: str    = "",
-                       department: str    = "",
-                       location: str      = "",
                        category: str      = "all",
                        search_method: str = "regular") -> str:
     """
@@ -25,8 +23,6 @@ def generate_query_url(seach_text: str    = "",
         seach_text (str, optional): Query text. Defaults to "".
         surname (str, optional): Surname. Defaults to "".
         given_name (str, optional): Given Name. Defaults to "".
-        department (str, optional): Department. Unknown use, part of built-in query system but seemingly has no effect on search results. Defaults to "".
-        location (str, optional): Unknown use, part of built-in query system but seemingly has no effect on search results. Defaults to "".
         category (str, optional): Search category, one of 'all', 'faculty', 'stagg', 'student', 'emeriti'. Defaults to "all".
         search_method (str, optional): Search method, one of 'regular', 'phonetic'. Defaults to "regular".
 
@@ -41,10 +37,6 @@ def generate_query_url(seach_text: str    = "",
     
     validate(given_name, str)
     
-    validate(department, str)
-    
-    validate(location, str)
-    
     categories: list[str] = ["all", "faculty", "staff", "student", "emeriti"]
     validate_option(category, categories)
     
@@ -55,10 +47,8 @@ def generate_query_url(seach_text: str    = "",
     seach_text = quote(seach_text)
     surname    = quote(surname)
     given_name = quote(given_name)
-    department = quote(department)
-    location   = quote(location)
     
     return "https://webapps.case.edu/directory/lookup?" + \
             f"search_text={seach_text}&surname={surname}&givenname={given_name}" + \
-            f"&department={department}&location={location}&category={category}" + \
+            f"&department=&location=&category={category}" + \
             f"&search_method={search_method}"
