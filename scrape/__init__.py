@@ -1,1 +1,1 @@
-from scrape.scrape import Error, RequestError, generate_query_url, scrape_info_regex
+from scrape.scrape import Error, RequestError, scrape_info_regex

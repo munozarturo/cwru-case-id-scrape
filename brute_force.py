@@ -21,7 +21,9 @@ General Notes
 
 from itertools import product
 from pathlib import Path
-from scrape import RequestError, generate_query_url, scrape_info_regex
+from scrape import RequestError, scrape_info_regex
+
+from cwru import generate_query_url
 
 from log import Logger
 
