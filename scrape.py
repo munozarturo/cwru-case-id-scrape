@@ -56,10 +56,18 @@ def generate_query_url(seach_text: str    = "",
             f"&department=&location=&category={category}" + \
             f"&search_method={search_method}"
 
-def scrape_info(url: str) -> dict[str, str]:
+def scrape_info(url: str) -> list[str]:
     """
-    Scrape the given url and return a dictionary of the scraped info.
+    Scrape email addresses from a Case Western Reserve University directory query url.
+
+    Args:
+        url (str): URL to scrape.
+
+    Returns:
+        list[str]: list of @case.edu email addresses.
     """
+    
+    validate(url, str)
     
     # get html content
     html: str = urlopen(url).read().decode("utf-8")
