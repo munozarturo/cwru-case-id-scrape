@@ -7,6 +7,16 @@ from urllib.request import urlopen
 import re
 
 
+class Error(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
+
+class RequestError(Error):
+    """Base class for request exceptions."""
+    pass
+
+
 def generate_query_url(seach_text: str    = "",
                        surname: str       = "",
                        given_name: str    = "",
@@ -69,8 +79,14 @@ def scrape_info(url: str) -> list[str]:
     
     validate(url, str)
     
-    # get html content
-    html: str = urlopen(url).read().decode("utf-8")
+    # request content
+    request = urlopen(url)
+    
+    # check for errors
+    if request.getcode() == 500:
+        raise RequestError("Server Error")
+    
+    html: str = request.read().decode("utf-8")
     # find all email addresses that match the pattern email@case.edu
     matches: list[str] = list(re.findall('[\w\.-]+@case.edu+', html))
     
