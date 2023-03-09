@@ -5,8 +5,8 @@ from scrape import RequestError, generate_query_url, scrape_info
 from log import log
 
 # output file
-output_to: Path = Path("results2.txt")
-dump_on_exit: Path = Path("dump2.txt")
+output_to: Path = Path("results.txt")
+dump_on_exit: Path = Path("dump.txt")
 
 """
 List of possible pseudo given names.
@@ -20,6 +20,7 @@ assert len(given_names) == 26**3
 try:
     # scrape all query urls
     i: int = 0
+    total_scraped: int = 0
     while given_names:
         # get query url
         current_name: str = given_names[0]
@@ -31,10 +32,15 @@ try:
         
         # get results
         try:
+            # scrape
             results: list[str] = scrape_info(query_url)
             
+            # update total scraped
+            total_scraped += len(results)
+            
             # print results
-            log(f"Found {len(results)} results", indent_level=1, source=current_name)
+            log(f"Found {len(results)} results.", indent_level=1, source=current_name)
+            log(f"Total scraped: {total_scraped}", indent_level=1)
 
             # write results to file
             for result in results:
