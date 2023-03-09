@@ -2,6 +2,8 @@ from itertools import product
 from pathlib import Path
 from scrape import RequestError, generate_query_url, scrape_info
 
+from log import log
+
 # output file
 output_to: Path = Path("results2.txt")
 dump_on_exit: Path = Path("dump2.txt")
