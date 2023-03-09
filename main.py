@@ -43,6 +43,8 @@ try:
             print(f"\tAdded to query_urls list.")
             
             given_names.append(current_name)
+            
+        i += 1
 except Exception as e:
     print(f"Error: {e}")
 except KeyboardInterrupt:
