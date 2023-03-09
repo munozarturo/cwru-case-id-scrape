@@ -4,6 +4,7 @@ from scrape import RequestError, generate_query_url, scrape_info
 
 # output file
 output_to: Path = Path("results.txt")
+dump_on_exit: Path = Path("dump.txt")
 
 """
 List of possible pseudo given names.
@@ -17,28 +18,36 @@ assert len(given_names) == 26**3
 # generate a list of query urls
 query_urls: list[str] = [generate_query_url(given_name=given_name, category="student") for given_name in given_names]
 
-# scrape all query urls
-i: int = 0
-while query_urls:
-    query_url: str = query_urls.pop(0)
-    
-    # print progress
-    print(f"Scraping {i+1}/{len(query_urls)} ({round((i+1)/len(query_urls)*100, 2)}%)")
-    
-    # get results
-    try:
-        results: list[str] = scrape_info(query_url)
+try:
+    # scrape all query urls
+    i: int = 0
+    while query_urls:
+        query_url: str = query_urls.pop(0)
         
-        # print results
-        print(f"Found {len(results)} results")
+        # print progress
+        print(f"Scraping {i+1}/{len(query_urls)} ({round((i+1)/len(query_urls)*100, 2)}%)")
+        
+        # get results
+        try:
+            results: list[str] = scrape_info(query_url)
+            
+            # print results
+            print(f"Found {len(results)} results")
 
-        # write results to file
-        for result in results:
-            with open(output_to, "a") as file:
-                file.write(result + "\n")
-    except RequestError as e:
-        # if there is an error, add the query url to the list
-        print(f"Error scraping {query_url}...")
-        print(f"\tAdded to query_urls list.")
-        
-        query_urls.append(query_url)
+            # write results to file
+            for result in results:
+                with open(output_to, "a") as file:
+                    file.write(result + "\n")
+        except RequestError as e:
+            # if there is an error, add the query url to the list
+            print(f"Error scraping {query_url}...")
+            print(f"\tAdded to query_urls list.")
+            
+            query_urls.append(query_url)
+except Exception as e:
+    print(f"Error: {e}")
+except KeyboardInterrupt:
+    print("Exiting...")
+    print(f"Results saved to '{output_to}'.")
+    print(f"Dumping remaining query urls to 'dump.txt'.")
+    exit(0)
