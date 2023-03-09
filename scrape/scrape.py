@@ -70,10 +70,10 @@ def generate_query_url(seach_text: str    = "",
             f"search_text={seach_text}&surname={surname}&givenname={given_name}" + \
             f"&department=&location=&category={category}" + \
             f"&search_method={search_method}"
-            
-def batch_download_urls(urls: list[tuple(str, str)], dump: str | Path | Any, _sep: str = "\n"):
+ 
+def batch_request_urls(urls: list[tuple(str, str)], dump: str | Path | Any, _sep: str = "\n"):
     """
-    Batch download urls.
+    Batch request and download urls.
 
     Args:
         urls (list[tuple): List of tuples containing the name and url to download.

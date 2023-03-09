@@ -4,6 +4,9 @@ log.txt
 # local custom results files
 results.txt
 
+# local data files
+data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
