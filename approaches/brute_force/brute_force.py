@@ -4,18 +4,18 @@ by using every possible 3 letter combination of the alphabet and a wildcard to
 match all possible names.
 
 There are a few limitations to this:
-* Using the requests library without some form of university authetication limits the
+- Using the requests library without some form of university authetication limits the
   search results to 10 per query.
-    * If some way to authenticate with a unversity account is found, this would remove
-      this limitation, and allow for up to 250 results per page which would exponentially
-      speed up the scraping process (around 600 queries instead of 17576).
+  - If some way to authenticate with a unversity account is found, this would remove
+    this limitation, and allow for up to 250 results per page which would exponentially
+    speed up the scraping process (around 600 queries instead of 17576).
 
 General Notes
-* This approach is not particularly fast -- could be due to a bottleneck or just
+- This approach is not particularly fast -- could be due to a bottleneck or just
   its brute force nature.
-* This approach of brute forcing names will not match all possible names, but it
+- This approach of brute forcing names will not match all possible names, but it
   gets close enough to be useful.
-    * Some names that will not be matched: R'Ay, etc.
+  - Some names that will not be matched: R'Ay, etc.
 
 """
 
@@ -23,9 +23,11 @@ from itertools import product
 from pathlib import Path
 from scrape import RequestError, generate_query_url, scrape_info
 
-from log import log
+from log import Logger
 
 def brute_force() -> None:
+  logger: Logger = Logger(print_=True, file_=True, file_path=Path("log.txt"))
+  
   # output file
   output_to: Path = Path("results.txt")
   dump_on_exit: Path = Path("dump.txt")
@@ -49,8 +51,8 @@ def brute_force() -> None:
           query_url: str = generate_query_url(seach_text=given_names.pop(0), category="student")
 
           # print progress
-          log(f"Scraping {current_name}...")
-          log(f"{i+1}/{len(given_names)} ({round((i+1)/len(given_names)*100, 2)}%) {len(given_names)} remaining...", indent_level=1)
+          logger.log(f"Scraping {current_name}...")
+          logger.log(f"{i+1}/{len(given_names)} ({round((i+1)/len(given_names)*100, 2)}%) {len(given_names)} remaining...", indent_level=1)
           
           # get results
           try:
@@ -61,8 +63,8 @@ def brute_force() -> None:
               total_scraped += len(results)
               
               # print results
-              log(f"Found {len(results)} results.", indent_level=1, source=current_name)
-              log(f"Total scraped: {total_scraped}", indent_level=1)
+              logger.log(f"Found {len(results)} results.", indent_level=1, source=current_name)
+              logger.log(f"Total scraped: {total_scraped}", indent_level=1)
 
               # write results to file
               for result in results:
@@ -70,18 +72,18 @@ def brute_force() -> None:
                       file.write(result + "\n")
           except RequestError as e:
               # if there is an error, add the query url to the list
-              log(f"Error scraping {current_name}...", indent_level=1, source=current_name)
-              log(f"Added to query_urls list.", indent_level=2, source=current_name)
+              logger.log(f"Error scraping {current_name}...", indent_level=1, source=current_name)
+              logger.log(f"Added to query_urls list.", indent_level=2, source=current_name)
               
               given_names.append(current_name)
                   
           i += 1
   except Exception as e:
-      log(f"Error: {e}")
+      logger.log(f"Error: {e}")
   except KeyboardInterrupt:
-      log("Exiting...")
-      log(f"Results saved to '{output_to}'.", indent_level=1)
-      log(f"Dumping remaining query urls to '{dump_on_exit}'.", indent_level=1)
+      logger.log("Exiting...")
+      logger.log(f"Results saved to '{output_to}'.", indent_level=1)
+      logger.log(f"Dumping remaining query urls to '{dump_on_exit}'.", indent_level=1)
       
       with open(dump_on_exit, "w") as file:
           for name in given_names:

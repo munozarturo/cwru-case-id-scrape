@@ -17,19 +17,19 @@ class Logger:
         raise AttributeError("Cannot delete log_num.")
     
     @property
-    def outpath(self) -> Path | NoneType:
-        return self.__outpath
+    def path(self) -> Path | NoneType:
+        return self.__path
     
-    @outpath.setter
-    def outpath(self, outpath: str | Path | NoneType | Any) -> None:
+    @path.setter
+    def path(self, path: str | Path | NoneType | Any) -> None:
         try:
-            self.__outpath = outpath if isinstance(outpath, Path) else Path(outpath)
+            self.__path = path if isinstance(path, Path) else Path(path)
         except :
-            raise TypeError("`outpath` must be pathlike.")
+            raise TypeError("`path` must be pathlike.")
         
-    @outpath.deleter
-    def outpath(self) -> None:
-        self.__outpath = None
+    @path.deleter
+    def path(self) -> None:
+        self.__path = None
     
     @property
     def print(self) -> bool:
@@ -46,24 +46,24 @@ class Logger:
         raise AttributeError("Cannot delete print.")
     
     @property
-    def do_log(self) -> bool:
-        return self.__do_log
+    def file_(self) -> bool:
+        return self.__file_
     
-    @do_log.setter
-    def do_log(self, do_log: bool) -> None:
-        validate(do_log, bool)
+    @file_.setter
+    def file_(self, file_: bool) -> None:
+        validate(file_, bool)
         
-        self.__do_log = do_log
+        self.__file_ = file_
     
-    def __init__(self, outpath: str | Path | NoneType | Any, print_: bool = True, do_log: bool = True) -> None:
+    def __init__(self, path: str | Path | NoneType | Any, print_: bool = True, file_: bool = True) -> None:
         self.__log_num: int = 0
         self.__print: bool = True
-        self.__do_log: bool = True
-        self.__outpath: Path | NoneType = None
+        self.__file_: bool = True
+        self.__path: Path | NoneType = None
         
         self.print = print_
-        self.do_log = do_log
-        self.outpath = outpath
+        self.file_ = file_
+        self.path = path
         
     def log(self, msg: str, indent_level: int = 0, source: str | NoneType = None) -> None:
         """
@@ -88,8 +88,8 @@ class Logger:
         if self.print:
             print(_msg)
         
-        if self.do_log:
-            with open(self.outpath, "a") as file:
+        if self.file_:
+            with open(self.path, "a") as file:
                 file.write(_msg + "\n")
         
         self.__log_num += 1
