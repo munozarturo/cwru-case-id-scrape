@@ -28,13 +28,17 @@ General Notes
 
 logger: Logger = Logger(print_=True, file_=True, file_path="log.txt")
 
-urls: list[str] = [generate_query_url(seach_text=query, category="student") for query in
-    [f"{''.join(c)}*" for c in product("abcdefghijklmnopqrstuvwxyz", repeat=3)]]
+urls: list[str] = [
+    generate_query_url(seach_text=query, category="student")
+    for query in [
+        f"{''.join(c)}*" for c in product("abcdefghijklmnopqrstuvwxyz", repeat=3)
+    ]
+]
 
 scraper: SequentialScraper = SequentialScraper(
     url=urls,
     request_func=lambda url: urlopen(url).read().decode("utf-8"),
-    scrape_func=lambda html: list(set(re.findall('[\w\.-]+@case.edu+', html))),
+    scrape_func=lambda html: list(set(re.findall("[\w\.-]+@case.edu+", html))),
 )
 
 results: list[list[str]] = scraper.run(
