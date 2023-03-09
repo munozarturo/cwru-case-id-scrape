@@ -32,6 +32,9 @@ def generate_query_url(seach_text: str    = "",
     4) This directory only performs searches based only on names, e-mail addresses, and phone numbers.
     5) This directory only returns exact matches for 2 character search criteria; a minimum of 3 characters is required for all other searches.
 
+    ***
+        Department and Location searches are only supported if logged in with a case email.
+
     Args:
         seach_text (str, optional): Query text. Defaults to "".
         surname (str, optional): Surname. Defaults to "".
@@ -89,6 +92,14 @@ def scrape_info(url: str) -> list[str]:
     html: str = request.read().decode("utf-8")
     # find all email addresses that match the pattern email@case.edu
     matches: list[str] = list(re.findall('[\w\.-]+@case.edu+', html))
+    
+    # # too many matches
+    # if re.match(r'Your search returned more than 10 matches.', html):
+    #     raise RequestError("Too many matches")
+    
+    # # no matches
+    # if re.match(r'Sorry, there are no results for your search.', html):
+    #     raise RequestError("No matches")
     
     # convert to set and then back to list to remove duplicates
     return list(set(matches))
