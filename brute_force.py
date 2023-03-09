@@ -1,3 +1,24 @@
+"""
+This module mainly tries to collect all student emails from the university
+by using every possible 3 letter combination of the alphabet and a wildcard to
+match all possible names.
+
+There are a few limitations to this:
+* Using the requests library without some form of university authetication limits the
+  search results to 10 per query.
+    * If some way to authenticate with a unversity account is found, this would remove
+      this limitation, and allow for up to 250 results per page which would exponentially
+      speed up the scraping process (around 600 queries instead of 17576).
+
+General Notes
+* This approach is not particularly fast -- could be due to a bottleneck or just
+  its brute force nature.
+* This approach of brute forcing names will not match all possible names, but it
+  gets close enough to be useful.
+    * Some names that will not be matched: R'Ay, etc.
+
+"""
+
 from itertools import product
 from pathlib import Path
 from scrape import RequestError, generate_query_url, scrape_info
@@ -24,7 +45,7 @@ try:
     while given_names:
         # get query url
         current_name: str = given_names[0]
-        query_url: str = generate_query_url(given_name=given_names.pop(0), category="student")
+        query_url: str = generate_query_url(seach_text=given_names.pop(0), category="student")
 
         # print progress
         log(f"Scraping {current_name}...")
