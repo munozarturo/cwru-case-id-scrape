@@ -10,3 +10,5 @@ given_names: list[str] = [f"{''.join(c)}*" for c in product("abcdefghijklmnopqrs
 # quick check that every possible combination has been generated
 assert len(given_names) == 26**3
 
+query_urls: list[str] = [generate_query_url(given_name=given_name, category="student") for given_name in given_names]
+
