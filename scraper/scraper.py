@@ -1,5 +1,5 @@
 from validate import validate, validate_iterable, validate_option
-from typing import Callable, Iterable
+from typing import Any, Callable, Iterable
 
 class Scraper:
     @property
@@ -31,7 +31,7 @@ class Scraper:
         
     @request_func.deleter
     def request_func(self) -> None:
-        raise AttributeError("Cannot delete request_func.")
+        raise AttributeError("Cannot delete `request_func`.")
     
     @property
     def scrape_func(self) -> Callable[[str], str]:
@@ -45,7 +45,7 @@ class Scraper:
         
     @scrape_func.deleter
     def scrape_func(self) -> None:
-        raise AttributeError("Cannot delete scrape_func.")
+        raise AttributeError("Cannot delete `scrape_func`.")
     
     def __init__(self, 
                  url: str | Iterable[str], 
@@ -54,11 +54,11 @@ class Scraper:
         
         self.__urls: Iterable[str] = []
         self.__request_func: Callable[[str], str] = None
-        self.__scraper_func: Callable[[str], str] = None
+        self.__scraper_func: Callable[[str], Any] = None
         
         self.urls = url
         self.request_func = request_func
         self.scrape_func = scrape_func
         
-    def run(self) -> None:
+    def run(self) -> Any:
         raise NotImplementedError("`run()` must be implemented.")
