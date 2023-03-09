@@ -26,7 +26,7 @@ General Notes
 
 """
 
-logger: Logger = Logger(print_=True, file_=True, file_path="log.txt")
+logger: Logger = Logger(print_=True, file_=True, file_path="brute_force_log.rlog")
 
 urls: list[str] = [
     generate_query_url(seach_text=query, category="student")
