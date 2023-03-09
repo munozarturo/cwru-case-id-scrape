@@ -1,8 +1,10 @@
+from types import NoneType
+from typing import Union
 from validate.vval import validate
 
 LOG_NUM: int = 0
 
-def log(msg: str, indent_level: int = 0, source: str = str | None) -> None:
+def log(msg: str, indent_level: int = 0, source: str | NoneType = None) -> None:
     """
     Print `msg` to console and write it to `log.txt`.
 
@@ -13,12 +15,16 @@ def log(msg: str, indent_level: int = 0, source: str = str | None) -> None:
     
     validate(msg, str)
     validate(indent_level, int)
-    validate(source, [str, None])
+    validate(source, (str, NoneType))
+    
+    global LOG_NUM
     
     indent: str = "    " * indent_level
     
-    if source is None:
-        _msg: str = f"{LOG_NUM}{indent}{source}: {msg}"
+    if source is not None:
+        _msg: str = f"{str(LOG_NUM).rjust(5)}  {indent}{source}: {msg}"
+    else:
+        _msg: str = f"{str(LOG_NUM).rjust(5)}  {indent} {msg}"
     
     print(_msg)
     

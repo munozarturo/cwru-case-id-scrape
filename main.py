@@ -26,14 +26,15 @@ try:
         query_url: str = generate_query_url(given_name=given_names.pop(0), category="student")
         
         # print progress
-        log(f"Scraping {current_name}... {i+1}/{len(given_names)} ({round((i+1)/len(given_names)*100, 2)}%) {len(given_names)} remaining...")
+        log(f"Scraping {current_name}...")
+        log(f"{i+1}/{len(given_names)} ({round((i+1)/len(given_names)*100, 2)}%) {len(given_names)} remaining...", indent_level=1)
         
         # get results
         try:
             results: list[str] = scrape_info(query_url)
             
             # print results
-            log(f"  Found {len(results)} results")
+            log(f"Found {len(results)} results", indent_level=1, source=current_name)
 
             # write results to file
             for result in results:
@@ -41,8 +42,8 @@ try:
                     file.write(result + "\n")
         except RequestError as e:
             # if there is an error, add the query url to the list
-            log(f"Error scraping {current_name}...")
-            log(f"\tAdded to query_urls list.")
+            log(f"Error scraping {current_name}...", indent_level=1, source=current_name)
+            log(f"Added to query_urls list.", indent_level=2, source=current_name)
             
             given_names.append(current_name)
             
@@ -51,8 +52,8 @@ except Exception as e:
     log(f"Error: {e}")
 except KeyboardInterrupt:
     log("Exiting...")
-    log(f"Results saved to '{output_to}'.")
-    log(f"Dumping remaining query urls to '{dump_on_exit}'.")
+    log(f"Results saved to '{output_to}'.", indent_level=1)
+    log(f"Dumping remaining query urls to '{dump_on_exit}'.", indent_level=1)
     
     with open(dump_on_exit, "w") as file:
         for name in given_names:
