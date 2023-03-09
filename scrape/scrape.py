@@ -69,7 +69,7 @@ def generate_query_url(seach_text: str    = "",
             f"&department=&location=&category={category}" + \
             f"&search_method={search_method}"
 
-def scrape_info(url: str) -> list[str]:
+def scrape_info_regex(url: str) -> list[str]:
     """
     Scrape email addresses from a Case Western Reserve University directory query url.
 

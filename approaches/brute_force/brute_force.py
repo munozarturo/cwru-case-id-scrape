@@ -21,7 +21,7 @@ General Notes
 
 from itertools import product
 from pathlib import Path
-from scrape import RequestError, generate_query_url, scrape_info
+from scrape import RequestError, generate_query_url, scrape_info_regex
 
 from log import Logger
 
@@ -55,7 +55,7 @@ def brute_force() -> None:
           # get results
           try:
               # scrape
-              results: list[str] = scrape_info(query_url)
+              results: list[str] = scrape_info_regex(query_url)
               
               # update total scraped
               total_scraped += len(results)
