@@ -2,6 +2,7 @@ from validate import validate_iterable, validate, is_callable
 from validate.vval import validate_option
 
 from urllib.parse import quote
+from urllib.request import urlopen
 
 
 def generate_query_url(seach_text: str    = "",
@@ -53,3 +54,21 @@ def generate_query_url(seach_text: str    = "",
             f"&department=&location=&category={category}" + \
             f"&search_method={search_method}"
             
+
+def get_html_content(url: str) -> str:
+    """
+    Get the html content from a url.
+
+    Args:
+        url (str): Url.
+
+    Returns:
+        str: Html content.
+    """
+    # validate arguments
+    validate(url, str)
+    
+    # get html content
+    with urlopen(url) as response:
+        return response.read().decode('utf-8')
+
