@@ -33,9 +33,9 @@ def log(msg: str, indent_level: int = 0, source: str | NoneType = None) -> None:
     indent: str = "    " * indent_level
     
     if source is not None:
-        _msg: str = f"{str(LOG_NUM).rjust(5)}  {indent}{source}: {msg}"
+        _msg: str = f"{str(LOG_NUM).rjust(7)}  {indent}{source}: {msg}"
     else:
-        _msg: str = f"{str(LOG_NUM).rjust(5)}  {indent} {msg}"
+        _msg: str = f"{str(LOG_NUM).rjust(7)}  {indent} {msg}"
     
     global PRINT
     if PRINT:

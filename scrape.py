@@ -93,6 +93,7 @@ def scrape_info(url: str) -> list[str]:
     # find all email addresses that match the pattern email@case.edu
     matches: list[str] = list(re.findall('[\w\.-]+@case.edu+', html))
     
+    """These dont' work properly."""
     # too many matches
     if re.match(r'Your search returned more than 10 matches.', html):
         raise RequestError("Too many matches")
