@@ -12,12 +12,16 @@ assert len(given_names) == 26**3
 
 # generate a list of query urls
 query_urls: list[str] = [generate_query_url(given_name=given_name, category="student") for given_name in given_names]
-    
+
+# scrape all query urls
 for i, query_url in enumerate(query_urls):
+    # print progress
     print(f"Scraping {i+1}/{len(query_urls)} ({round((i+1)/len(query_urls)*100, 2)}%)")
     
+    # get results
     results: list[str] = scrape_info(query_url=query_url)
 
+    # write results to file
     for result in results:
         with open("results.txt", "a") as file:
             file.write(result + "\n")
