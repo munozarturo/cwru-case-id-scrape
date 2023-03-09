@@ -21,8 +21,10 @@ from scraper import SequentialScraper
 
 # create a list of urls to be queried
 urls: list[str] = [
+    # generate a query url
     generate_query_url(seach_text=query, category="student")
     for query in [
+        # generate a cartesian product of all possible 3 letter combinations in the latin alphabet
         f"{''.join(c)}*" for c in product("abcdefghijklmnopqrstuvwxyz", repeat=3)
     ]
 ]
