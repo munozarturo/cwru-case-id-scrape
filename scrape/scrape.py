@@ -1,3 +1,5 @@
+from pathlib import Path
+from typing import Any
 from validate import validate_iterable, validate, is_callable
 from validate.vval import validate_option
 
@@ -68,6 +70,38 @@ def generate_query_url(seach_text: str    = "",
             f"search_text={seach_text}&surname={surname}&givenname={given_name}" + \
             f"&department=&location=&category={category}" + \
             f"&search_method={search_method}"
+            
+def batch_download_urls(urls: list[tuple(str, str)], dump: str | Path | Any, _sep: str = "\n"):
+    """
+    Batch download urls.
+
+    Args:
+        urls (list[tuple): List of tuples containing the name and url to download.
+        dump (str | Path | Any): The location to dump the downloaded files. If a directory, the files will be dumped there. If a file, the files will be appended to the file.
+        _sep (str, optional): Separator used if dumping to a single file. Defaults to "\n".
+
+    """
+    
+    validate_iterable(urls, tuple)
+    dump = Path(dump) if not isinstance(dump, Path) else dump
+    validate(_sep, str)
+    
+    if not dump.is_dir():
+        if not dump.exists():
+            dump.mkdir(parents=True)
+
+    for name, url in urls:
+        request = urlopen(url)
+        
+        html: str = request.read().decode("utf-8")
+        
+        if dump.is_dir():
+            with open(f"{dump}/{name}.html", "w") as f:
+                f.write(html)
+        else:
+            with open(dump, "a") as f:
+                f.write(_sep + html)
+
 
 def scrape_info_regex(url: str) -> list[str]:
     """
