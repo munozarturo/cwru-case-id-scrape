@@ -26,33 +26,34 @@ try:
         current_name: str = given_names[0]
         query_url: str = generate_query_url(given_name=given_names.pop(0), category="student")
         
-        # print progress
-        log(f"Scraping {current_name}...")
-        log(f"{i+1}/{len(given_names)} ({round((i+1)/len(given_names)*100, 2)}%) {len(given_names)} remaining...", indent_level=1)
-        
-        # get results
-        try:
-            # scrape
-            results: list[str] = scrape_info(query_url)
+        if i > 26**3 - 6970:    
+            # print progress
+            log(f"Scraping {current_name}...")
+            log(f"{i+1}/{len(given_names)} ({round((i+1)/len(given_names)*100, 2)}%) {len(given_names)} remaining...", indent_level=1)
             
-            # update total scraped
-            total_scraped += len(results)
-            
-            # print results
-            log(f"Found {len(results)} results.", indent_level=1, source=current_name)
-            log(f"Total scraped: {total_scraped}", indent_level=1)
+            # get results
+            try:
+                # scrape
+                results: list[str] = scrape_info(query_url)
+                
+                # update total scraped
+                total_scraped += len(results)
+                
+                # print results
+                log(f"Found {len(results)} results.", indent_level=1, source=current_name)
+                log(f"Total scraped: {total_scraped}", indent_level=1)
 
-            # write results to file
-            for result in results:
-                with open(output_to, "a") as file:
-                    file.write(result + "\n")
-        except RequestError as e:
-            # if there is an error, add the query url to the list
-            log(f"Error scraping {current_name}...", indent_level=1, source=current_name)
-            log(f"Added to query_urls list.", indent_level=2, source=current_name)
-            
-            given_names.append(current_name)
-            
+                # write results to file
+                for result in results:
+                    with open(output_to, "a") as file:
+                        file.write(result + "\n")
+            except RequestError as e:
+                # if there is an error, add the query url to the list
+                log(f"Error scraping {current_name}...", indent_level=1, source=current_name)
+                log(f"Added to query_urls list.", indent_level=2, source=current_name)
+                
+                given_names.append(current_name)
+                
         i += 1
 except Exception as e:
     log(f"Error: {e}")
