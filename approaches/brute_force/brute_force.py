@@ -32,10 +32,8 @@ def brute_force() -> None:
   output_to: Path = Path("results.txt")
   dump_on_exit: Path = Path("dump.txt")
 
-  """
-  List of possible pseudo given names.
-  Generated with the cartesian product of the lowercase alphabet ^ 3.
-  """
+  # List of possible pseudo given names.
+  # Generated with the cartesian product of the lowercase alphabet ^ 3.
   given_names: list[str] = [f"{''.join(c)}*" for c in product("abcdefghijklmnopqrstuvwxyz", repeat=3)]
 
   # quick check that every possible combination has been generated
