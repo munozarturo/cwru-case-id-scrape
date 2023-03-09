@@ -1,5 +1,9 @@
 from itertools import product
+from pathlib import Path
 from scrape import generate_query_url, scrape_info
+
+# output file
+output_to: Path = Path("results.txt")
 
 """
 List of possible pseudo given names.
@@ -23,5 +27,5 @@ for i, query_url in enumerate(query_urls):
 
     # write results to file
     for result in results:
-        with open("results.txt", "a") as file:
+        with open(output_to, "a") as file:
             file.write(result + "\n")
