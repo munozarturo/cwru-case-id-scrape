@@ -21,11 +21,49 @@ General Notes
 
 from itertools import product
 from pathlib import Path
-from scrape import RequestError, scrape_info_regex
+from urllib.request import urlopen
 
 from cwru import generate_query_url
 
 from log import Logger
+from validate import validate
+
+import re
+
+class Error(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
+class RequestError(Error):
+    """Base class for request exceptions."""
+    pass
+
+def scrape_info_regex(url: str) -> list[str]:
+    """
+    Scrape email addresses from a Case Western Reserve University directory query url.
+
+    Args:
+        url (str): URL to scrape.
+
+    Returns:
+        list[str]: list of @case.edu email addresses.
+    """
+    
+    validate(url, str)
+    
+    # request content
+    request = urlopen(url)
+    
+    # check for errors
+    if request.getcode() == 500:
+        raise RequestError("Server Error")
+    
+    html: str = request.read().decode("utf-8")
+    # find all email addresses that match the pattern email@case.edu
+    matches: list[str] = list(re.findall('[\w\.-]+@case.edu+', html))
+    
+    # convert to set and then back to list to remove duplicates
+    return list(set(matches))
 
 def brute_force() -> None:
   logger: Logger = Logger(print_=True, file_=True, file_path=Path("log.txt"))
