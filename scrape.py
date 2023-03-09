@@ -4,6 +4,8 @@ from validate.vval import validate_option
 from urllib.parse import quote
 from urllib.request import urlopen
 
+import re
+
 
 def generate_query_url(seach_text: str    = "",
                        surname: str       = "",
@@ -53,22 +55,16 @@ def generate_query_url(seach_text: str    = "",
             f"search_text={seach_text}&surname={surname}&givenname={given_name}" + \
             f"&department=&location=&category={category}" + \
             f"&search_method={search_method}"
-            
 
-def get_html_content(url: str) -> str:
+def scrape_info(url: str) -> dict[str, str]:
     """
-    Get the html content from a url.
-
-    Args:
-        url (str): Url.
-
-    Returns:
-        str: Html content.
+    Scrape the given url and return a dictionary of the scraped info.
     """
-    # validate arguments
-    validate(url, str)
     
     # get html content
-    with urlopen(url) as response:
-        return response.read().decode('utf-8')
-
+    html: str = urlopen(url).read().decode("utf-8")
+    # find all email addresses that match the pattern email@case.edu
+    matches: list[str] = list(re.findall('[\w\.-]+@case.edu+', html))
+    
+    # convert to set and then back to list to remove duplicates
+    return list(set(matches))
