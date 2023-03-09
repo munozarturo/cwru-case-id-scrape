@@ -3,8 +3,8 @@ from pathlib import Path
 from scrape import RequestError, generate_query_url, scrape_info
 
 # output file
-output_to: Path = Path("results.txt")
-dump_on_exit: Path = Path("dump.txt")
+output_to: Path = Path("results2.txt")
+dump_on_exit: Path = Path("dump2.txt")
 
 """
 List of possible pseudo given names.
@@ -24,14 +24,14 @@ try:
         query_url: str = generate_query_url(given_name=given_names.pop(0), category="student")
         
         # print progress
-        print(f"Scraping {current_name}... {i+1}/{len(given_names)} ({round((i+1)/len(given_names)*100, 2)}%) {len(given_names)} remaining...")
+        log(f"Scraping {current_name}... {i+1}/{len(given_names)} ({round((i+1)/len(given_names)*100, 2)}%) {len(given_names)} remaining...")
         
         # get results
         try:
             results: list[str] = scrape_info(query_url)
             
             # print results
-            print(f"  Found {len(results)} results")
+            log(f"  Found {len(results)} results")
 
             # write results to file
             for result in results:
@@ -39,18 +39,18 @@ try:
                     file.write(result + "\n")
         except RequestError as e:
             # if there is an error, add the query url to the list
-            print(f"Error scraping {current_name}...")
-            print(f"\tAdded to query_urls list.")
+            log(f"Error scraping {current_name}...")
+            log(f"\tAdded to query_urls list.")
             
             given_names.append(current_name)
             
         i += 1
 except Exception as e:
-    print(f"Error: {e}")
+    log(f"Error: {e}")
 except KeyboardInterrupt:
-    print("Exiting...")
-    print(f"Results saved to '{output_to}'.")
-    print(f"Dumping remaining query urls to '{dump_on_exit}'.")
+    log("Exiting...")
+    log(f"Results saved to '{output_to}'.")
+    log(f"Dumping remaining query urls to '{dump_on_exit}'.")
     
     with open(dump_on_exit, "w") as file:
         for name in given_names:
