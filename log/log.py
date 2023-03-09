@@ -14,7 +14,6 @@ def set_log(log_: bool) -> None:
     global LOG
     LOG = log_
 
-
 def log(msg: str, indent_level: int = 0, source: str | NoneType = None) -> None:
     """
     Print `msg` to console and write it to `log.txt`.
