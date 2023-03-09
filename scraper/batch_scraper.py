@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Any, Callable, Iterable
 from scraper.scraper import Scraper
-from validate import validate
 
 
 class BatchScraper(Scraper):
