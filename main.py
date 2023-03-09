@@ -15,24 +15,23 @@ given_names: list[str] = [f"{''.join(c)}*" for c in product("abcdefghijklmnopqrs
 # quick check that every possible combination has been generated
 assert len(given_names) == 26**3
 
-# generate a list of query urls
-query_urls: list[str] = [generate_query_url(given_name=given_name, category="student") for given_name in given_names]
-
 try:
     # scrape all query urls
     i: int = 0
-    while query_urls:
-        query_url: str = query_urls.pop(0)
+    while given_names:
+        # get query url
+        current_name: str = given_names[0]
+        query_url: str = generate_query_url(given_name=given_names.pop(0), category="student")
         
         # print progress
-        print(f"Scraping {i+1}/{len(query_urls)} ({round((i+1)/len(query_urls)*100, 2)}%)")
+        print(f"Scraping {current_name}... {i+1}/{len(given_names)} ({round((i+1)/len(given_names)*100, 2)}%) {len(given_names)} remaining...")
         
         # get results
         try:
             results: list[str] = scrape_info(query_url)
             
             # print results
-            print(f"Found {len(results)} results")
+            print(f"  Found {len(results)} results")
 
             # write results to file
             for result in results:
@@ -40,14 +39,19 @@ try:
                     file.write(result + "\n")
         except RequestError as e:
             # if there is an error, add the query url to the list
-            print(f"Error scraping {query_url}...")
+            print(f"Error scraping {current_name}...")
             print(f"\tAdded to query_urls list.")
             
-            query_urls.append(query_url)
+            given_names.append(current_name)
 except Exception as e:
     print(f"Error: {e}")
 except KeyboardInterrupt:
     print("Exiting...")
     print(f"Results saved to '{output_to}'.")
-    print(f"Dumping remaining query urls to 'dump.txt'.")
+    print(f"Dumping remaining query urls to '{dump_on_exit}'.")
+    
+    with open(dump_on_exit, "w") as file:
+        for name in given_names:
+            file.write(name + "\n")
+    
     exit(0)
