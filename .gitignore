@@ -1,6 +1,9 @@
 # vscode
 .vscode/
 
+# web drivers exclude
+chromedriver.exe
+
 # local custom raw log files
 *.rlog
 

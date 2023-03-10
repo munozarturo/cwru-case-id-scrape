@@ -1,11 +1,4 @@
-import os
-import re
-import dotenv
-
-dotenv.load_dotenv(".env")
-
 from itertools import product
-import requests
 from cwru.cwru import generate_query_url
 from log import Logger
 from scraper import BatchScraper
