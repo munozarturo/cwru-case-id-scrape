@@ -23,19 +23,19 @@ Additionally you must have the chromedriver.exe file in the web_drivers director
 It is possible to download the chromedriver.exe file from here: https://chromedriver.chromium.org/downloads.
 Check the version of your chrome browser and download the appropriate chromedriver.exe file and then move it to this directory.
 
+***
 This module follows a very similar approach to the brute_force.py module, but with a few key differences:
 - It queries the University's website by finding a way to provide authentication.
     - By providing valid authentication, the university's website allows for up to 250 results per page.
     - Unly uses 2 letter combinations which reduces the number of queries (about 600 instead of 17576).
 - The scraping function remains the same.
 
-***
-
 Working with the selenium library has provided an insight on authentication:
 * It might be done through a cookie, but I'm not sure.
     * Investing time into this would be a good idea. Since it would speed up the process of requesting.
     
-* Additionally, I have noticed that the query results website has no tags and no ids.
+Additionally, I have noticed that the query results website has no ids, which makes parsing harder so
+I stuck to the regex parser for this example.
 """
 
 dotenv.load_dotenv()
@@ -63,13 +63,22 @@ def request_func(url: str) -> None:
     # open url
     driver.get(url)
 
-    # find the login prompt
-    driver.find_element(By.PARTIAL_LINK_TEXT, "log in").click()
-
-    # enter credentials
-    driver.find_element(By.ID, "username").send_keys(os.getenv("CWRU_USERNAME"))
-    driver.find_element(By.ID, "password").send_keys(os.getenv("CWRU_PASSWORD"))
-    driver.find_element(By.ID, "login-submit").click()
+    try:
+        # find the login prompt
+        driver.find_element(By.PARTIAL_LINK_TEXT, "log in").click()
+        
+        # enter credentials
+        driver.find_element(By.ID, "username").send_keys(os.getenv("CWRU_USERNAME"))
+        driver.find_element(By.ID, "password").send_keys(os.getenv("CWRU_PASSWORD"))
+        driver.find_element(By.ID, "login-submit").click()
+    except:
+        """
+        ignore the exception, because presumable the login prompt has not been found, which means that there are no results.
+        or less than 10 results.
+        in the case that there are no results this is ingored
+        in the case that there are less than 10 results, the data is still scraped.
+        """ 
+        pass
 
     # get html source
     html: str = driver.page_source
@@ -99,3 +108,4 @@ results: list[list[str]] = scraper.run(
     request_callback=lambda i, url: logger.log(f"Requesting {i} of {len(urls)}: {url}"),
     scrape_callback=lambda i, url: logger.log(f"Scraping {i} of {len(urls)}: {url}"),
 )
+
