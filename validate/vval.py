@@ -165,7 +165,7 @@ def validate(value: Any,
             # extract types from type_
             allowed_types = __extract_types(type_)
     # if type_ is a single type then append it to the list
-    elif isinstance(type_, Type) or isinstance(type_, type):
+    elif isinstance(type_, Type) or isinstance(type_, type) or isinstance(type_, Callable):
         allowed_types.append(type_)
     else:
         raise TypeError(

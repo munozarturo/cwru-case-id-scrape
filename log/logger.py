@@ -18,18 +18,18 @@ class Logger:
         raise AttributeError("Cannot delete log_num.")
 
     @property
-    def path(self) -> Path | NoneType:
+    def file_path(self) -> Path | NoneType:
         return self.__path
 
-    @path.setter
-    def path(self, path: str | Path | NoneType | Any) -> None:
+    @file_path.setter
+    def file_path(self, file_path: str | Path | NoneType | Any) -> None:
         try:
-            self.__path = path if isinstance(path, Path) else Path(path)
+            self.__path = file_path if isinstance(file_path, Path) else Path(file_path)
         except:
-            raise TypeError("`path` must be pathlike.")
+            raise TypeError("`file_path` must be pathlike.")
 
-    @path.deleter
-    def path(self) -> None:
+    @file_path.deleter
+    def file_path(self) -> None:
         self.__path = None
 
     @property
@@ -57,7 +57,7 @@ class Logger:
         self.__file_ = file_
 
     def __init__(
-        self, path: str | Path | NoneType | Any, print_: bool = True, file_: bool = True
+        self, file_path: str | Path | NoneType | Any, print_: bool = True, file_: bool = True
     ) -> None:
         self.__log_num: int = 0
         self.__print: bool = True
@@ -66,7 +66,7 @@ class Logger:
 
         self.print = print_
         self.file_ = file_
-        self.path = path
+        self.file_path = file_path
 
     def log(
         self, msg: str, indent_level: int = 0, source: str | NoneType = None
@@ -94,7 +94,7 @@ class Logger:
             print(_msg)
 
         if self.file_:
-            with open(self.path, "a") as file:
+            with open(self.file_path, "a") as file:
                 file.write(_msg + "\n")
 
         self.__log_num += 1

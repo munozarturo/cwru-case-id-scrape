@@ -49,7 +49,11 @@ class SequentialScraper(Scraper):
 
             # request the url and scrape the response
             response = self.request_func(url)
-            results.append(self.scrape_func(response))
+            scraped: Any = self.scrape_func(response)
+            
+            print(scraped)
+            
+            results.append(scraped)
 
         # return the results
         return results

@@ -3,7 +3,7 @@ import re
 from urllib.request import urlopen
 from cwru.cwru import generate_query_url
 from log import Logger
-from scraper import SequentialScraper
+from scraper import BatchScraper
 
 """
 This module follows a very similar approach to the brute_force.py module, but with a few key differences:

@@ -42,5 +42,5 @@ scraper: SequentialScraper = SequentialScraper(
 )
 
 results: list[list[str]] = scraper.run(
-    callback=lambda i, url: Logger.log(f"Scraping {i} of {len(urls)}: {url}")
+    callback=lambda i, url: logger.log(f"Scraping {i} of {len(urls)}: {url}")
 )
