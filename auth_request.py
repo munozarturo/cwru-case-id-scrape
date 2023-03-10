@@ -20,25 +20,12 @@ This module follows a very similar approach to the brute_force.py module, but wi
 
 logger: Logger = Logger(print_=True, file_=True, file_path="auth_request_log.rlog")
 
-response = requests.get("https://webapps.case.edu/directory/lookup?search_text=aa*&surname=&givenname=ar*&department=&location=&category=all&search_method=regular",
-             auth=(os.getenv("USERNAME"), os.getenv("PASSWORD")))
 
-with open("dump.html", "w") as f:
-    f.write(response.text)
 
-# # create a list of urls to scrape
-# urls: list[str] = [
-#     generate_query_url(seach_text=query, category="student")
-#     for query in [
-#         f"{''.join(c)}*" for c in product("abcdefghijklmnopqrstuvwxyz", repeat=2)
-#     ]
-# ][0:5]
-
-# scraper: BatchScraper = BatchScraper(
-#     url=urls,
-#     request_func=lambda url: urllib.request.urlopen(url).read().decode("utf-8"),
-#     scrape_func=lambda html: list(set(re.findall("[\w\.-]+@case.edu+", html))),
-#     path="dump"
-# )
-
-# scraper.run()
+# create a list of urls to scrape
+urls: list[str] = [
+    generate_query_url(seach_text=query, category="student")
+    for query in [
+        f"{''.join(c)}*" for c in product("abcdefghijklmnopqrstuvwxyz", repeat=2)
+    ]
+][0:5]
