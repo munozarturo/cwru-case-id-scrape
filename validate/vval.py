@@ -165,7 +165,7 @@ def validate(value: Any,
             # extract types from type_
             allowed_types = __extract_types(type_)
     # if type_ is a single type then append it to the list
-    elif isinstance(type_, Type) or isinstance(type_, type):
+    elif isinstance(type_, Type) or isinstance(type_, type) or isinstance(type_, Callable):
         allowed_types.append(type_)
     else:
         raise TypeError(
@@ -218,10 +218,22 @@ def validate_iterable(iter_: Iterable,
     return True
 
 
-def validate_option(value: Any, options: Iterable[Any]) -> bool:
+def validate_option(value: Any, options: Iterable[Any]):
+    """
+    Validate that `value` is one of the values in `options`.
+
+    Args:
+        value (Any): Value.
+        options (Iterable[Any]): Iterable of values.
+
+    Raises:
+        ValueError: If `value` is not in `options`.
+    """
+    # if options is not an iterable raise an error
     if not isinstance(options, Iterable):
         raise TypeError(
             f"Expected 'Iterable' for `options`, got: '{type(options).__name__}'.")
         
+    # raise an error if value is not in options
     if not value in options:
         raise ValueError(f"Expected one of {','.join(options)}, got: '{value}'.")

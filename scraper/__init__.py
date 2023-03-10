@@ -1,0 +1,3 @@
+from scraper.scraper import Scraper
+from scraper.batch_scraper import BatchScraper
+from scraper.sequential_scraper import SequentialScraper

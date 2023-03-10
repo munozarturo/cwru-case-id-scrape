@@ -1,8 +1,9 @@
-# local custom log files
-log.txt
+# local custom raw log files
+*.rlog
 
-# local custom results files
-results.txt
+# local custom data dumps
+*.dump
+dump/
 
 # local data files
 data/
