@@ -1,6 +1,8 @@
 from pathlib import Path
+from types import NoneType
 from typing import Any, Callable, Iterable
 from scraper.scraper import Scraper
+from validate import validate
 
 
 class BatchScraper(Scraper):
@@ -48,6 +50,7 @@ class BatchScraper(Scraper):
         self,
         request_callback: Callable[[int, str], Any] = None,
         scrape_callback: Callable[[int, str], Any] = None,
+        delete_after_use: bool = True,
     ) -> list[Any]:
         """
         Run the batch scraper.
@@ -63,10 +66,20 @@ class BatchScraper(Scraper):
         """
 
         self.batch_request(request_callback)
-        results: list[Any] = self.batch_scrape(scrape_callback)
+        results: list[Any] = self.batch_scrape(scrape_callback, delete_after_use)
         return results
-        
-    def batch_request(self, request_callback: Callable[[int, str], Any] = None) -> None:
+
+    def batch_request(
+        self, request_callback: Callable[[int, str], Any] | NoneType = None
+    ) -> None:
+        """
+        Batch request all urls. And store them in `self.path`
+
+        Args:
+            request_callback (Callable[[int, str], Any] | NoneType, optional): _description_. Defaults to None.
+        """
+        validate(request_callback, (Callable, NoneType))
+
         for i, url in enumerate(self.urls):
             if request_callback is not None:
                 request_callback(i, url)
@@ -76,7 +89,14 @@ class BatchScraper(Scraper):
             file_path: Path = Path(f"{self.path}/{i}.html")
             file_path.write_text(response)
 
-    def batch_scrape(self, scrape_callback: Callable[[int, str], Any] = None) -> list[Any]:
+    def batch_scrape(
+        self,
+        scrape_callback: Callable[[int, str], Any] | NoneType = None,
+        delete_after_use: bool = True,
+    ) -> list[Any]:
+        validate(scrape_callback, (Callable, NoneType))
+        validate(delete_after_use, bool)
+
         results: list[Any] = []
 
         for i, url in enumerate(self.urls):
@@ -86,6 +106,7 @@ class BatchScraper(Scraper):
             file_path: Path = Path(f"{self.path}/{i}.html")
             response: str = file_path.read_text()
             results.append(self.scrape_func(response))
-            file_path.unlink()
+            if delete_after_use:
+                file_path.unlink()
 
         return results

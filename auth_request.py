@@ -107,6 +107,7 @@ scraper: BatchScraper = BatchScraper(
 results: list[list[str]] = scraper.run(
     request_callback=lambda i, url: logger.log(f"Requesting {i} of {len(urls)}: {url}"),
     scrape_callback=lambda i, url: logger.log(f"Scraping {i} of {len(urls)}: {url}"),
+    delete_after_use=False
 )
 
 # flatten the results
