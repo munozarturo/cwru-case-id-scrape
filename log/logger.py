@@ -57,7 +57,10 @@ class Logger:
         self.__file_ = file_
 
     def __init__(
-        self, file_path: str | Path | NoneType | Any, print_: bool = True, file_: bool = True
+        self,
+        file_path: str | Path | NoneType | Any,
+        print_: bool = True,
+        file_: bool = True,
     ) -> None:
         self.__log_num: int = 0
         self.__print: bool = True

@@ -12,7 +12,7 @@ class SequentialScraper(Scraper):
     ) -> None:
         """
         Sequential scraper.
-        
+
         Will scrape urls sequentially. Meaning it will request the first url, scrape it, then request the second url, scrape it, and so on.
 
         Args:
@@ -28,7 +28,7 @@ class SequentialScraper(Scraper):
         Run the sequential scraper.
 
         Args:
-            callback (Callable[[int, str], Any], optional): Called at the start of every sequential parse iteration. 
+            callback (Callable[[int, str], Any], optional): Called at the start of every sequential parse iteration.
                 It is called with the current url iteration number and the url. Defaults to None.
 
         Returns:
@@ -50,9 +50,9 @@ class SequentialScraper(Scraper):
             # request the url and scrape the response
             response = self.request_func(url)
             scraped: Any = self.scrape_func(response)
-            
+
             print(scraped)
-            
+
             results.append(scraped)
 
         # return the results

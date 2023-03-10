@@ -30,7 +30,7 @@ class BatchScraper(Scraper):
     ) -> None:
         """
         Batch scraper.
-        
+
         Will scrape urls in parts. Will first request and store all urls, then scrape and delete all urls.
 
         Args:
@@ -53,9 +53,9 @@ class BatchScraper(Scraper):
         Run the batch scraper.
 
         Args:
-            request_callback (Callable[[int, str], Any], optional): Called at the start of every sequential request iteration. 
+            request_callback (Callable[[int, str], Any], optional): Called at the start of every sequential request iteration.
                 It is called with the current url iteration number and the url. Defaults to None.
-            scrape_callback (Callable[[int, str], Any], optional): Called at the start of every sequential scrape iteration. 
+            scrape_callback (Callable[[int, str], Any], optional): Called at the start of every sequential scrape iteration.
                 It is called with the current url iteration number and the url. Defaults to None.
 
         Returns:
@@ -67,19 +67,19 @@ class BatchScraper(Scraper):
                 request_callback(i, url)
 
             response = self.request_func(url)
-            
+
             file_path: Path = Path(f"{self.path}/{i}.html")
             file_path.write_text(response)
 
         results: list[Any] = []
-        
+
         for i, url in enumerate(self.urls):
             if scrape_callback is not None:
                 scrape_callback(i, url)
-                
+
             file_path: Path = Path(f"{self.path}/{i}.html")
             response: str = file_path.read_text()
             results.append(self.scrape_func(response))
             file_path.unlink()
-            
+
         return results

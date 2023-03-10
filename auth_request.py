@@ -29,6 +29,7 @@ dotenv.load_dotenv()
 
 logger: Logger = Logger(print_=True, file_=True, file_path="auth_request_log.rlog")
 
+
 def request_func(url: str) -> None:
     """
     HTML request function using Selenium chromedriver.
@@ -41,27 +42,28 @@ def request_func(url: str) -> None:
     Returns:
         str: HTML source.
     """
-    
+
     # set up chrome driver
     service: Service = Service(executable_path="web_drivers/chromedriver.exe")
     driver: webdriver.Chrome = webdriver.Chrome(service=service)
-    
+
     # open url
     driver.get(url)
-    
+
     # find the login prompt
     driver.find_element(By.PARTIAL_LINK_TEXT, "log in").click()
-    
+
     # enter credentials
     driver.find_element(By.ID, "username").send_keys(os.getenv("CWRU_USERNAME"))
     driver.find_element(By.ID, "password").send_keys(os.getenv("CWRU_PASSWORD"))
     driver.find_element(By.ID, "login-submit").click()
-    
+
     # get html source
     html: str = driver.page_source
-    
+
     # return html source
     return html
+
 
 # create a list of urls to scrape
 urls: list[str] = [
@@ -76,7 +78,7 @@ scraper: BatchScraper = BatchScraper(
     url=urls,
     request_func=request_func,
     scrape_func=lambda html: list(set(re.findall("[\w\.-]+@case.edu+", html))),
-    path="dump"
+    path="dump",
 )
 
 # run the scraper
@@ -84,4 +86,3 @@ results: list[list[str]] = scraper.run(
     request_callback=lambda i, url: logger.log(f"Requesting {i} of {len(urls)}: {url}"),
     scrape_callback=lambda i, url: logger.log(f"Scraping {i} of {len(urls)}: {url}"),
 )
-
