@@ -25,7 +25,8 @@ urls: list[str] = [
     generate_query_url(seach_text=query, category="student")
     for query in [
         # generate a cartesian product of all possible 3 letter combinations in the latin alphabet
-        f"{''.join(c)}*" for c in product("abcdefghijklmnopqrstuvwxyz", repeat=3)
+        f"{''.join(c)}*"
+        for c in product("abcdefghijklmnopqrstuvwxyz", repeat=3)
     ]
 ]
 
