@@ -1,6 +1,10 @@
+import os
+import dotenv
+
+dotenv.load_dotenv(".env")
+
 from itertools import product
-import re
-from urllib.request import urlopen
+import urllib.request
 from cwru.cwru import generate_query_url
 from log import Logger
 from scraper import BatchScraper
@@ -15,6 +19,20 @@ This module follows a very similar approach to the brute_force.py module, but wi
 
 logger: Logger = Logger(print_=True, file_=True, file_path="auth_request_log.rlog")
 
+# create password manager
+password_manager: urllib.request.HTTPPasswordMgrWithDefaultRealm = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+# add username and password
+password_manager.add_password(None, "https://webapps.case.edu", os.getenv("CWRU_USERNAME"), os.getenv("CWRU_PASSWORD"))
+
+# create authentication handler
+handler: urllib.request.HTTPBasicAuthHandler = urllib.request.HTTPBasicAuthHandler(password_manager)
+
+# create a url opener
+opener: urllib.request.OpenerDirector = urllib.request.build_opener(handler)
+# install the opener
+urllib.request.install_opener(opener)
+
+# create a list of urls to scrape
 urls: list[str] = [
     generate_query_url(seach_text=query, category="student")
     for query in [
