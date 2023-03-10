@@ -109,3 +109,9 @@ results: list[list[str]] = scraper.run(
     scrape_callback=lambda i, url: logger.log(f"Scraping {i} of {len(urls)}: {url}"),
 )
 
+# flatten the results
+results: list[str] = [r for r in results for r in r]
+
+# write the results to a file
+with open("auth_request_results.dump", "w") as f:
+    f.write("\n".join(results))

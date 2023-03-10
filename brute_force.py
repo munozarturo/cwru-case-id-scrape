@@ -44,3 +44,10 @@ scraper: SequentialScraper = SequentialScraper(
 results: list[list[str]] = scraper.run(
     callback=lambda i, url: logger.log(f"Scraping {i} of {len(urls)}: {url}")
 )
+
+# flatten the results
+results: list[str] = [r for r in results for r in r]
+
+# write the results to a file
+with open("brute_force_results.dump", "w") as f:
+    f.write("\n".join(results))
