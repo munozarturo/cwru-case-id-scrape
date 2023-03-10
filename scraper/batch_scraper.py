@@ -12,9 +12,6 @@ class BatchScraper(Scraper):
     def path(self, path: str | Path | Any) -> None:
         _path: Path = Path(path) if not isinstance(path, Path) else path
 
-        if not _path.is_dir():
-            raise ValueError("`path` must be a directory.")
-
         if not _path.exists():
             _path.mkdir(parents=True)
 
@@ -70,7 +67,8 @@ class BatchScraper(Scraper):
                 request_callback(i, url)
 
             response = self.request_func(url)
-            file_path = f"self.path / {i}.html"
+            
+            file_path: Path = Path(f"{self.path}/{i}.html")
             file_path.write_text(response)
 
         results: list[Any] = []
@@ -78,8 +76,9 @@ class BatchScraper(Scraper):
         for i, url in enumerate(self.urls):
             if scrape_callback is not None:
                 scrape_callback(i, url)
-
-            response = file_path.read_text()
+                
+            file_path: Path = Path(f"{self.path}/{i}.html")
+            response: str = file_path.read_text()
             results.append(self.scrape_func(response))
             file_path.unlink()
             
