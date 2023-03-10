@@ -62,6 +62,11 @@ class BatchScraper(Scraper):
             list[Any]: List of results.
         """
 
+        self.batch_request(request_callback)
+        results: list[Any] = self.batch_scrape(scrape_callback)
+        return results
+        
+    def batch_request(self, request_callback: Callable[[int, str], Any] = None) -> None:
         for i, url in enumerate(self.urls):
             if request_callback is not None:
                 request_callback(i, url)
@@ -71,6 +76,7 @@ class BatchScraper(Scraper):
             file_path: Path = Path(f"{self.path}/{i}.html")
             file_path.write_text(response)
 
+    def batch_scrape(self, scrape_callback: Callable[[int, str], Any] = None) -> list[Any]:
         results: list[Any] = []
 
         for i, url in enumerate(self.urls):
