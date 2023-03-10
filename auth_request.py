@@ -10,6 +10,19 @@ import dotenv
 from selenium.webdriver.common.by import By
 
 """
+To use this module you must have a .env file in the root directory with the following variables:
+CWRU_USERNAME and CWRU_PASSWORD.
+
+The file should look something like this:
+```
+CWRU_USERNAME=your_username
+CWRU_PASSWORD=your_password
+```
+
+Additionally you must have the chromedriver.exe file in the web_drivers directory.
+It is possible to download the chromedriver.exe file from here: https://chromedriver.chromium.org/downloads.
+Check the version of your chrome browser and download the appropriate chromedriver.exe file and then move it to this directory.
+
 This module follows a very similar approach to the brute_force.py module, but with a few key differences:
 - It queries the University's website by finding a way to provide authentication.
     - By providing valid authentication, the university's website allows for up to 250 results per page.
